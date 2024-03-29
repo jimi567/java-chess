@@ -23,4 +23,9 @@ public interface Piece {
     boolean isSameTeam(Piece piece);
 
     boolean isNotSameTeam(Piece piece);
+
+    boolean isSameTeam(Team team);
+
+    boolean isNotSameTeam(Team team);
+
 }

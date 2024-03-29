@@ -61,4 +61,14 @@ public class DummyPiece implements Piece {
     public boolean isNotSameTeam(final Piece piece) {
         return false;
     }
+
+    @Override
+    public boolean isSameTeam(final Team team) {
+        return false;
+    }
+
+    @Override
+    public boolean isNotSameTeam(final Team team) {
+        return false;
+    }
 }

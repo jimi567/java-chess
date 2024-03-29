@@ -12,12 +12,24 @@ public abstract class AbstractPiece implements Piece {
         this.team = team;
     }
 
+    @Override
     public boolean isSameTeam(Piece other) {
         return this.team == other.getTeam();
     }
 
+    @Override
     public boolean isNotSameTeam(Piece other) {
         return !isSameTeam(other);
+    }
+
+    @Override
+    public boolean isSameTeam(Team team) {
+        return this.team == team;
+    }
+
+    @Override
+    public boolean isNotSameTeam(Team team) {
+        return !isSameTeam(team);
     }
 
     @Override
