@@ -7,7 +7,6 @@ import chess.domain.piece.Piece;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 
 public class Board {
     private final Map<Coordinate, Piece> pieces;
@@ -21,25 +20,20 @@ public class Board {
         pieces = BoardFactory.createInitialPieces();
     }
 
-    public Piece findByCoordinate(final Coordinate coordinate) {
-        return pieces.get(coordinate);
-    }
-
-    public void move(final Coordinate source, final Coordinate target) {
-        validateCoordinates(source, target);
+    public Piece move(final Coordinate source, final Coordinate target) {
         Piece sourcePiece = findByCoordinate(source);
         List<Coordinate> coordinates = sourcePiece.legalNextCoordinates(source, target);
         if (sourcePiece.canMove(source, target, makeBoardInformation(coordinates))) {
-            swap(source, target);
-            return;
+            Piece targetPiece = findByCoordinate(target);
+            pieces.put(target, sourcePiece.updateAfterMove());
+            pieces.put(source, DummyPiece.getInstance());
+            return targetPiece;
         }
         throw new IllegalStateException("해당 기물은 목적지 좌표에 갈 수 없습니다.");
     }
 
-    private void swap(final Coordinate source, final Coordinate target) {
-        Piece sourcePiece = pieces.get(source);
-        pieces.put(target, sourcePiece.updateAfterMove());
-        pieces.put(source, DummyPiece.getInstance());
+    public Piece findByCoordinate(final Coordinate coordinate) {
+        return pieces.get(coordinate);
     }
 
     private Map<Coordinate, Piece> makeBoardInformation(final List<Coordinate> coordinates) {
@@ -48,12 +42,4 @@ public class Board {
         return boardInformation;
     }
 
-    private void validateCoordinates(final Coordinate source, final Coordinate target) {
-        if (pieces.get(source).isEmpty()) {
-            throw new NoSuchElementException("보드에 움직일 대상 기물이 없습니다.");
-        }
-        if (source.equals(target)) {
-            throw new IllegalArgumentException("동일한 위치로 이동할 수 없습니다.");
-        }
-    }
 }

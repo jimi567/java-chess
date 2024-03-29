@@ -7,7 +7,6 @@ import static chess.domain.fixture.CoordinateFixture.A7;
 import static chess.domain.fixture.CoordinateFixture.A8;
 import static chess.domain.fixture.CoordinateFixture.B1;
 import static chess.domain.fixture.CoordinateFixture.B2;
-import static chess.domain.fixture.CoordinateFixture.B3;
 import static chess.domain.fixture.CoordinateFixture.B7;
 import static chess.domain.fixture.CoordinateFixture.B8;
 import static chess.domain.fixture.CoordinateFixture.C1;
@@ -46,15 +45,13 @@ import static chess.domain.piece.fixedmove.Knight.BLACK_KNIGHT;
 import static chess.domain.piece.fixedmove.Knight.WHITE_KNIGHT;
 import static chess.domain.piece.pawn.InitialBlackPawn.INITIAL_BLACK_PAWN;
 import static chess.domain.piece.pawn.InitialWhitePawn.INITIAL_WHITE_PAWN;
-import static chess.domain.piece.pawn.NormalWhitePawn.NORMAL_WHITE_PAWN;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import chess.domain.piece.DummyPiece;
 import chess.domain.piece.Piece;
 import java.util.HashMap;
 import java.util.List;
-import java.util.NoSuchElementException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -223,24 +220,6 @@ class BoardTest {
         assertThat(result).containsOnly(INITIAL_BLACK_PAWN);
     }
 
-    @DisplayName("source 좌표에 기물이 없으면 예외를 발생한다.")
-    @Test
-    void noSource() {
-        Board emptyBoard = new Board(new HashMap<>());
-
-        assertThatThrownBy(() -> emptyBoard.move(A2, B3))
-                .isInstanceOf(NoSuchElementException.class);
-    }
-
-    @DisplayName("source 좌표와 target 좌표가 같으면 예외를 발생한다.")
-    @Test
-    void targetSameSource() {
-        Board board = new Board();
-
-        assertThatThrownBy(() -> board.move(A2, A2))
-                .isInstanceOf(IllegalArgumentException.class);
-    }
-
     @DisplayName("기물이 움직일 수 있다.")
     @Test
     void move() {
@@ -251,9 +230,8 @@ class BoardTest {
         pieces.put(source, sourcePiece);
         Board board = new Board(pieces);
 
-        board.move(source, target);
+        Piece result = board.move(source, target);
 
-        Piece result = board.findByCoordinate(target);
-        assertThat(result).isInstanceOf(NORMAL_WHITE_PAWN.getClass());
+        assertThat(result).isInstanceOf(DummyPiece.class);
     }
 }
