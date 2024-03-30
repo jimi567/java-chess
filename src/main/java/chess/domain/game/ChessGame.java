@@ -23,7 +23,7 @@ public class ChessGame {
         state = state.start();
     }
 
-    public void move(Coordinate source, Coordinate target) {
+    public void move(final Coordinate source, final Coordinate target) {
         state = state.move(board, source, target);
     }
 
