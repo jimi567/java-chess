@@ -1,6 +1,8 @@
 package chess.view;
 
 import chess.domain.board.Board;
+import chess.domain.game.ChessStatus;
+import java.math.BigDecimal;
 import java.util.List;
 
 public class OutputView {
@@ -24,6 +26,21 @@ public class OutputView {
         StringBuilder stringBuilder = new StringBuilder();
         rowData.forEach(stringBuilder::append);
         System.out.println(stringBuilder);
+    }
+
+    public void printStatus(ChessStatus status) {
+        BigDecimal blackScore = status.blackScore();
+        BigDecimal whitScore = status.whiteScore();
+        System.out.println("현재 점수는 흑팀 : " + blackScore + "백팀 : " + whitScore);
+        if (blackScore.compareTo(whitScore) > 0) {
+            System.out.println("흑이 이기는 중입니다.");
+            return;
+        }
+        if (blackScore.compareTo(whitScore) < 0) {
+            System.out.println("백이 이기는 중입니다.");
+            return;
+        }
+        System.out.println("무승부 상황입니다.");
     }
 
     public void printErrorMessage(String errorMessage) {
