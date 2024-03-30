@@ -42,26 +42,30 @@ class Controller {
     private void proceed() {
         outputView.printBoard(chessGame.board());
         while (chessGame.isRunning()) {
-            InputTokens inputTokens = inputView.readCommand();
-            Command command = Command.from(inputTokens);
-            if (command.isMove()) {
-                chessGame.move(command.sourceCoordinate(inputTokens), command.targetCoordinate(inputTokens));
-                outputView.printBoard(chessGame.board());
-                continue;
-            }
-
-            if (command.isStatus()) {
-                ChessStatus status = chessGame.status();
-                outputView.printStatus(status);
-                continue;
-            }
-
-            if (command.isEnd()) {
-                chessGame.end();
-                break;
-            }
-            throw new IllegalArgumentException("잘못된 입력입니다.");
+            execute();
         }
+    }
+
+    private void execute() {
+        InputTokens inputTokens = inputView.readCommand();
+        Command command = Command.from(inputTokens);
+        if (command.isMove()) {
+            chessGame.move(command.sourceCoordinate(inputTokens), command.targetCoordinate(inputTokens));
+            outputView.printBoard(chessGame.board());
+            return;
+        }
+
+        if (command.isStatus()) {
+            ChessStatus status = chessGame.status();
+            outputView.printStatus(status);
+            return;
+        }
+
+        if (command.isEnd()) {
+            chessGame.end();
+            return;
+        }
+        throw new IllegalArgumentException("잘못된 입력입니다.");
     }
 
     private Command repeatUntilLegalCommand() {
