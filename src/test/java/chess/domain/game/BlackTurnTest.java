@@ -16,6 +16,10 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import chess.domain.board.Board;
 import chess.domain.board.Coordinate;
+import chess.domain.game.state.BlackTurn;
+import chess.domain.game.state.End;
+import chess.domain.game.state.State;
+import chess.domain.game.state.WhiteTurn;
 import chess.domain.piece.Piece;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,7 +32,7 @@ class BlackTurnTest {
     @DisplayName("생성 테스트")
     @Test
     void create() {
-        assertThatCode(() -> new BlackTurn(new Board()))
+        assertThatCode(BlackTurn::new)
                 .doesNotThrowAnyException();
     }
 
@@ -36,9 +40,9 @@ class BlackTurnTest {
     @Test
     void move() {
         Board board = new Board();
-        State blackTurn = new BlackTurn(board);
+        State blackTurn = new BlackTurn();
 
-        assertThat(blackTurn.move(D7, D5)).isInstanceOf(WhiteTurn.class);
+        assertThat(blackTurn.move(board, D7, D5)).isInstanceOf(WhiteTurn.class);
     }
 
     @DisplayName("기물을 움직였을때, King이 잡히면 게임이 종료된다.")
@@ -49,18 +53,18 @@ class BlackTurnTest {
         pieces.put(D1, WHITE_KING);
 
         Board board = new Board(pieces);
-        State blackTurn = new BlackTurn(board);
+        State blackTurn = new BlackTurn();
 
-        assertThat(blackTurn.move(D8, D1)).isInstanceOf(End.class);
+        assertThat(blackTurn.move(board, D8, D1)).isInstanceOf(End.class);
     }
 
     @DisplayName("source 좌표에 기물이 없으면 예외가 발생한다.")
     @Test
     void moveNothing() {
         Board board = new Board();
-        State blackTurn = new BlackTurn(board);
+        State blackTurn = new BlackTurn();
 
-        assertThatThrownBy(() -> blackTurn.move(A5, A8))
+        assertThatThrownBy(() -> blackTurn.move(board, A5, A8))
                 .isInstanceOf(NoSuchElementException.class);
     }
 
@@ -68,9 +72,9 @@ class BlackTurnTest {
     @Test
     void moveWhite() {
         Board board = new Board();
-        State blackTurn = new BlackTurn(board);
-        
-        assertThatThrownBy(() -> blackTurn.move(A2, A4))
+        State blackTurn = new BlackTurn();
+
+        assertThatThrownBy(() -> blackTurn.move(board, A2, A4))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessage("지금은 흑팀의 차례입니다.");
     }

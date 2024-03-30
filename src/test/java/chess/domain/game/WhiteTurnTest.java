@@ -15,6 +15,10 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import chess.domain.board.Board;
 import chess.domain.board.Coordinate;
+import chess.domain.game.state.BlackTurn;
+import chess.domain.game.state.End;
+import chess.domain.game.state.State;
+import chess.domain.game.state.WhiteTurn;
 import chess.domain.piece.Piece;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,7 +31,7 @@ class WhiteTurnTest {
     @DisplayName("생성 테스트")
     @Test
     void create() {
-        assertThatCode(() -> new WhiteTurn(new Board()))
+        assertThatCode(WhiteTurn::new)
                 .doesNotThrowAnyException();
     }
 
@@ -35,9 +39,9 @@ class WhiteTurnTest {
     @Test
     void move() {
         Board board = new Board();
-        State whiteTurn = new WhiteTurn(board);
+        State whiteTurn = new WhiteTurn();
 
-        assertThat(whiteTurn.move(D2, D4)).isInstanceOf(BlackTurn.class);
+        assertThat(whiteTurn.move(board, D2, D4)).isInstanceOf(BlackTurn.class);
     }
 
     @DisplayName("기물을 움직였을때, King이 잡히면 게임이 종료된다.")
@@ -48,17 +52,17 @@ class WhiteTurnTest {
         pieces.put(D8, BLACK_KING);
 
         Board board = new Board(pieces);
-        State whiteTurn = new WhiteTurn(board);
+        State whiteTurn = new WhiteTurn();
 
-        assertThat(whiteTurn.move(D1, D8)).isInstanceOf(End.class);
+        assertThat(whiteTurn.move(board, D1, D8)).isInstanceOf(End.class);
     }
 
     @DisplayName("source 좌표에 기물이 없으면 예외가 발생한다.")
     @Test
     void moveNothing() {
         Board board = new Board();
-        State whiteTurn = new BlackTurn(board);
-        assertThatThrownBy(() -> whiteTurn.move(A5, A8))
+        State whiteTurn = new WhiteTurn();
+        assertThatThrownBy(() -> whiteTurn.move(board, A5, A8))
                 .isInstanceOf(NoSuchElementException.class);
     }
 
@@ -66,8 +70,8 @@ class WhiteTurnTest {
     @Test
     void moveBlack() {
         Board board = new Board();
-        State whiteTurn = new WhiteTurn(board);
-        assertThatThrownBy(() -> whiteTurn.move(A7, A5))
+        State whiteTurn = new WhiteTurn();
+        assertThatThrownBy(() -> whiteTurn.move(board, A7, A5))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessage("지금은 흰팀의 차례입니다.");
     }

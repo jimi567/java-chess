@@ -1,4 +1,4 @@
-package chess.domain.game;
+package chess.domain.game.state;
 
 import chess.domain.board.Board;
 import chess.domain.board.Coordinate;
@@ -8,19 +8,16 @@ import chess.domain.piece.fixedmove.King;
 import java.util.NoSuchElementException;
 
 public class BlackTurn extends Running {
-    protected BlackTurn(final Board board) {
-        super(board);
-    }
 
-    public State move(final Coordinate source, final Coordinate target) {
+    @Override
+    public State move(final Board board, final Coordinate source, final Coordinate target) {
         validateCoordinate(source, target);
         validateSourcePiece(board.findByCoordinate(source));
         Piece captured = board.move(source, target);
         if (captured instanceof King) {
-            System.out.println("22222");
             return new End();
         }
-        return new WhiteTurn(board);
+        return new WhiteTurn();
     }
 
     private void validateCoordinate(final Coordinate source, final Coordinate target) {
