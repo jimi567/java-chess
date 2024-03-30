@@ -7,6 +7,7 @@ import static chess.domain.fixture.CoordinateFixture.A7;
 import static chess.domain.fixture.CoordinateFixture.A8;
 import static chess.domain.fixture.CoordinateFixture.B1;
 import static chess.domain.fixture.CoordinateFixture.B2;
+import static chess.domain.fixture.CoordinateFixture.B6;
 import static chess.domain.fixture.CoordinateFixture.B7;
 import static chess.domain.fixture.CoordinateFixture.B8;
 import static chess.domain.fixture.CoordinateFixture.C1;
@@ -19,18 +20,23 @@ import static chess.domain.fixture.CoordinateFixture.D7;
 import static chess.domain.fixture.CoordinateFixture.D8;
 import static chess.domain.fixture.CoordinateFixture.E1;
 import static chess.domain.fixture.CoordinateFixture.E2;
+import static chess.domain.fixture.CoordinateFixture.E6;
 import static chess.domain.fixture.CoordinateFixture.E7;
 import static chess.domain.fixture.CoordinateFixture.E8;
 import static chess.domain.fixture.CoordinateFixture.F1;
 import static chess.domain.fixture.CoordinateFixture.F2;
+import static chess.domain.fixture.CoordinateFixture.F3;
+import static chess.domain.fixture.CoordinateFixture.F4;
 import static chess.domain.fixture.CoordinateFixture.F7;
 import static chess.domain.fixture.CoordinateFixture.F8;
 import static chess.domain.fixture.CoordinateFixture.G1;
 import static chess.domain.fixture.CoordinateFixture.G2;
+import static chess.domain.fixture.CoordinateFixture.G4;
 import static chess.domain.fixture.CoordinateFixture.G7;
 import static chess.domain.fixture.CoordinateFixture.G8;
 import static chess.domain.fixture.CoordinateFixture.H1;
 import static chess.domain.fixture.CoordinateFixture.H2;
+import static chess.domain.fixture.CoordinateFixture.H3;
 import static chess.domain.fixture.CoordinateFixture.H7;
 import static chess.domain.fixture.CoordinateFixture.H8;
 import static chess.domain.piece.directionmove.Bishop.BLACK_BISHOP;
@@ -45,13 +51,20 @@ import static chess.domain.piece.fixedmove.Knight.BLACK_KNIGHT;
 import static chess.domain.piece.fixedmove.Knight.WHITE_KNIGHT;
 import static chess.domain.piece.pawn.InitialBlackPawn.INITIAL_BLACK_PAWN;
 import static chess.domain.piece.pawn.InitialWhitePawn.INITIAL_WHITE_PAWN;
+import static chess.domain.piece.pawn.NormalBlackPawn.NORMAL_BLACK_PAWN;
+import static chess.domain.piece.pawn.NormalWhitePawn.NORMAL_WHITE_PAWN;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import chess.domain.piece.DummyPiece;
 import chess.domain.piece.Piece;
+import chess.domain.piece.Team;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -233,5 +246,48 @@ class BoardTest {
         Piece result = board.move(source, target);
 
         assertThat(result).isInstanceOf(DummyPiece.class);
+    }
+
+    /*
+    .KR.....  8
+    P.PB....  7
+    .P..Q...  6
+    ........  5
+    .....nq.  4
+    .....p.p  3
+    .....pp.  2
+    ....rk..  1
+
+    abcdefgh
+     */
+    @DisplayName("팀의 현재 총 점수를 알아낸다.")
+    @Test
+    void totalScoreByTeam() {
+        Map<Coordinate, Piece> pieces = new HashMap<>();
+        pieces.put(B8, BLACK_KING);
+        pieces.put(C8, BLACK_ROOK);
+        pieces.put(A7, NORMAL_BLACK_PAWN);
+        pieces.put(C7, NORMAL_BLACK_PAWN);
+        pieces.put(D7, BLACK_BISHOP);
+        pieces.put(B6, NORMAL_BLACK_PAWN);
+        pieces.put(E6, BLACK_QUEEN);
+        pieces.put(F4, WHITE_KNIGHT);
+        pieces.put(G4, WHITE_QUEEN);
+        pieces.put(F3, NORMAL_WHITE_PAWN);
+        pieces.put(H3, NORMAL_WHITE_PAWN);
+        pieces.put(F2, NORMAL_WHITE_PAWN);
+        pieces.put(G2, NORMAL_WHITE_PAWN);
+        pieces.put(E1, WHITE_ROOK);
+        pieces.put(F1, WHITE_KING);
+        Board board = new Board(pieces);
+
+        BigDecimal blackExpected = new BigDecimal(20);
+        BigDecimal whiteExpected = new BigDecimal("19.5");
+
+        assertAll(
+                () -> assertEquals(blackExpected, board.totalScoreByTeam(Team.BLACK)),
+                () -> assertEquals(whiteExpected, board.totalScoreByTeam(Team.WHITE))
+        );
+
     }
 }

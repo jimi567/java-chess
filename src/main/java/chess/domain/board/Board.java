@@ -4,6 +4,9 @@ import static chess.domain.board.BoardFactory.initialEmpty;
 
 import chess.domain.piece.DummyPiece;
 import chess.domain.piece.Piece;
+import chess.domain.piece.Team;
+import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,6 +43,20 @@ public class Board {
         Map<Coordinate, Piece> boardInformation = new LinkedHashMap<>();
         coordinates.forEach(coordinate -> boardInformation.put(coordinate, findByCoordinate(coordinate)));
         return boardInformation;
+    }
+
+    public BigDecimal totalScoreByTeam(final Team team) {
+        return pieces.entrySet().stream()
+                .filter(entry -> entry.getValue().isSameTeam(team))
+                .map(entry -> entry.getValue().score(findByTeamAndFile(team, entry.getKey().file())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    private List<Piece> findByTeamAndFile(final Team team, final File file) {
+        return Arrays.stream(Rank.values())
+                .map(rank -> findByCoordinate(Coordinate.of(file, rank)))
+                .filter(piece -> piece.isSameTeam(team))
+                .toList();
     }
 
 }

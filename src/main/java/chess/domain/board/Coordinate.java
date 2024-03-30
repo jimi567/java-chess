@@ -61,6 +61,10 @@ public class Coordinate {
         return Map.entry(this.file.compare(other.file), this.rank.compare(other.rank));
     }
 
+    public File file() {
+        return file;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
