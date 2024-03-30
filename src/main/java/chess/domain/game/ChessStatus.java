@@ -4,7 +4,13 @@ import chess.domain.piece.Team;
 import java.math.BigDecimal;
 import java.util.Map;
 
-public record ChessStatus(Map<Team, BigDecimal> scores) {
+public class ChessStatus {
+    private final Map<Team, BigDecimal> scores;
+
+    public ChessStatus(final Map<Team, BigDecimal> scores) {
+        this.scores = scores;
+    }
+
     public BigDecimal blackScore() {
         return scores.get(Team.BLACK);
     }
