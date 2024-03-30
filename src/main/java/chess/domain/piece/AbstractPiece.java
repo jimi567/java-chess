@@ -13,22 +13,22 @@ public abstract class AbstractPiece implements Piece {
     }
 
     @Override
-    public boolean isSameTeam(Piece other) {
+    public boolean isSameTeam(final Piece other) {
         return this.team == other.getTeam();
     }
 
     @Override
-    public boolean isNotSameTeam(Piece other) {
+    public boolean isNotSameTeam(final Piece other) {
         return !isSameTeam(other);
     }
 
     @Override
-    public boolean isSameTeam(Team team) {
+    public boolean isSameTeam(final Team team) {
         return this.team == team;
     }
 
     @Override
-    public boolean isNotSameTeam(Team team) {
+    public boolean isNotSameTeam(final Team team) {
         return !isSameTeam(team);
     }
 
@@ -40,6 +40,11 @@ public abstract class AbstractPiece implements Piece {
     @Override
     public boolean isNotEmpty() {
         return true;
+    }
+
+    @Override
+    public boolean isSameType(final PieceType type) {
+        return type == getType();
     }
 
     @Override

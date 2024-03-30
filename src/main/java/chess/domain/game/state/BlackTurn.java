@@ -3,8 +3,8 @@ package chess.domain.game.state;
 import chess.domain.board.Board;
 import chess.domain.board.Coordinate;
 import chess.domain.piece.Piece;
+import chess.domain.piece.PieceType;
 import chess.domain.piece.Team;
-import chess.domain.piece.fixedmove.King;
 import java.util.NoSuchElementException;
 
 public class BlackTurn extends Running {
@@ -14,7 +14,7 @@ public class BlackTurn extends Running {
         validateCoordinate(source, target);
         validateSourcePiece(board.findByCoordinate(source));
         Piece captured = board.move(source, target);
-        if (captured instanceof King) {
+        if (captured.isSameType(PieceType.KING)) {
             return new End();
         }
         return new WhiteTurn();

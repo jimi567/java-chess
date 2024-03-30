@@ -74,6 +74,11 @@ public class DummyPiece implements Piece {
     }
 
     @Override
+    public boolean isSameType(final PieceType type) {
+        return false;
+    }
+
+    @Override
     public BigDecimal score(final List<Piece> sameFileAlly) {
         return BigDecimal.ZERO;
     }

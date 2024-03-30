@@ -31,4 +31,6 @@ public interface Piece {
 
     boolean isNotSameTeam(Team team);
 
+    boolean isSameType(PieceType type);
+
 }

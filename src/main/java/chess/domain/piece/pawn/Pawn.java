@@ -88,7 +88,7 @@ public abstract class Pawn extends AbstractPiece {
 
     private int countPawn(final List<Piece> sameFilePieces) {
         return (int) sameFilePieces.stream()
-                .filter(piece -> getType() == piece.getType())
+                .filter(piece -> isSameType(piece.getType()))
                 .count();
     }
 }
