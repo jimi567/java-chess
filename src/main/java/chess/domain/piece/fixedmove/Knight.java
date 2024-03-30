@@ -14,12 +14,15 @@ import static chess.domain.piece.Team.WHITE;
 import chess.domain.piece.Piece;
 import chess.domain.piece.PieceType;
 import chess.domain.piece.Team;
+import java.math.BigDecimal;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 
 public final class Knight extends FixedMovePiece {
     public static final Piece WHITE_KNIGHT = new Knight(WHITE);
     public static final Piece BLACK_KNIGHT = new Knight(BLACK);
+    public static final BigDecimal SCORE = new BigDecimal("2.5");
 
     private Knight(Team team) {
         super(PieceType.KNIGHT, team);
@@ -37,5 +40,10 @@ public final class Knight extends FixedMovePiece {
                 TWO_RIGHT_ONE_DOWN.value(),
                 TWO_RIGHT_ONE_UP.value()
         );
+    }
+
+    @Override
+    public BigDecimal score(final List<Piece> sameFilePieces) {
+        return SCORE;
     }
 }

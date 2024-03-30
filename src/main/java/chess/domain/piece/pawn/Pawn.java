@@ -5,6 +5,7 @@ import chess.domain.piece.AbstractPiece;
 import chess.domain.piece.Piece;
 import chess.domain.piece.PieceType;
 import chess.domain.piece.Team;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -14,6 +15,10 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public abstract class Pawn extends AbstractPiece {
+
+    private static final BigDecimal DUPLICATE_SAME_FILE_SCORE = new BigDecimal("0.5");
+    private static final BigDecimal NORMAL_SCORE = BigDecimal.ONE;
+
     Pawn(final Team team) {
         super(PieceType.PAWN, team);
     }
@@ -70,5 +75,20 @@ public abstract class Pawn extends AbstractPiece {
                 .filter(coordinate -> boardInformation.get(coordinate).isNotEmpty() && boardInformation.get(coordinate)
                         .isNotSameTeam(this))
                 .collect(Collectors.toSet());
+    }
+
+    @Override
+    public BigDecimal score(final List<Piece> sameFilePieces) {
+        return sameFilePieces.stream()
+                .filter(piece -> countPawn(sameFilePieces) > 1)
+                .map(piece -> DUPLICATE_SAME_FILE_SCORE)
+                .findFirst()
+                .orElse(NORMAL_SCORE);
+    }
+
+    private int countPawn(final List<Piece> sameFilePieces) {
+        return (int) sameFilePieces.stream()
+                .filter(piece -> getType() == piece.getType())
+                .count();
     }
 }

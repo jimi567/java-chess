@@ -1,6 +1,7 @@
 package chess.domain.piece;
 
 import chess.domain.board.Coordinate;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -70,5 +71,10 @@ public class DummyPiece implements Piece {
     @Override
     public boolean isNotSameTeam(final Team team) {
         return false;
+    }
+
+    @Override
+    public BigDecimal score(final List<Piece> sameFilePieces) {
+        return BigDecimal.ZERO;
     }
 }
