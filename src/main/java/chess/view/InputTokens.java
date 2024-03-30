@@ -5,7 +5,7 @@ import java.util.List;
 
 public class InputTokens {
 
-    private static final int START_AND_END_COMMAND_SIZE = 1;
+    private static final int COMMAND_SIZE = 1;
     private static final int MOVE_COMMAND_SIZE = 3;
     private static final int COMMAND_TOKEN_POSITION = 0;
     private static final int SOURCE_TOKEN_POSITION = 1;
@@ -15,14 +15,22 @@ public class InputTokens {
 
     public InputTokens(final String commandInput) {
         List<String> tokens = Arrays.stream(commandInput.split(" ")).toList();
-        validateCommandSize(tokens);
+        validateCommand(tokens);
         this.tokens = tokens;
     }
 
-    private void validateCommandSize(final List<String> splitInput) {
-        if (splitInput.size() != START_AND_END_COMMAND_SIZE && splitInput.size() != MOVE_COMMAND_SIZE) {
+    private void validateCommand(final List<String> splitInput) {
+        if (validateSize(splitInput) && validateMoveCommand(splitInput)) {
             throw new IllegalArgumentException("잘못된 입력입니다.");
         }
+    }
+
+    private boolean validateMoveCommand(final List<String> splitInput) {
+        return splitInput.size() != MOVE_COMMAND_SIZE || !splitInput.get(COMMAND_TOKEN_POSITION).equals("move");
+    }
+
+    private boolean validateSize(final List<String> splitInput) {
+        return splitInput.size() != COMMAND_SIZE;
     }
 
     public String getCommandToken() {
