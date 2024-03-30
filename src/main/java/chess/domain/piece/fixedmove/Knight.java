@@ -43,7 +43,7 @@ public final class Knight extends FixedMovePiece {
     }
 
     @Override
-    public BigDecimal score(final List<Piece> sameFilePieces) {
+    public BigDecimal score(final List<Piece> sameFileAlly) {
         return SCORE;
     }
 }

@@ -78,9 +78,9 @@ public abstract class Pawn extends AbstractPiece {
     }
 
     @Override
-    public BigDecimal score(final List<Piece> sameFilePieces) {
-        return sameFilePieces.stream()
-                .filter(piece -> countPawn(sameFilePieces) > 1)
+    public BigDecimal score(final List<Piece> sameFileAlly) {
+        return sameFileAlly.stream()
+                .filter(piece -> countPawn(sameFileAlly) > 1)
                 .map(piece -> DUPLICATE_SAME_FILE_SCORE)
                 .findFirst()
                 .orElse(NORMAL_SCORE);

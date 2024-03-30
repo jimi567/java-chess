@@ -31,7 +31,7 @@ public class Bishop extends DirectionMovePiece {
     }
 
     @Override
-    public BigDecimal score(final List<Piece> sameFilePieces) {
+    public BigDecimal score(final List<Piece> sameFileAlly) {
         return SCORE;
     }
 }

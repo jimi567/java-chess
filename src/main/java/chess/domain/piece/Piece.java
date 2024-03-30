@@ -13,7 +13,7 @@ public interface Piece {
 
     Piece updateAfterMove();
 
-    BigDecimal score(List<Piece> sameFilePieces);
+    BigDecimal score(List<Piece> sameFileAlly);
 
     PieceType getType();
 
