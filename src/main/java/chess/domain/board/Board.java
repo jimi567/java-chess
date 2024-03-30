@@ -48,11 +48,11 @@ public class Board {
     public BigDecimal totalScoreByTeam(final Team team) {
         return pieces.entrySet().stream()
                 .filter(entry -> entry.getValue().isSameTeam(team))
-                .map(entry -> entry.getValue().score(findByTeamAndFile(team, entry.getKey().file())))
+                .map(entry -> entry.getValue().score(findSameFileAlly(team, entry.getKey().file())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
-    private List<Piece> findByTeamAndFile(final Team team, final File file) {
+    private List<Piece> findSameFileAlly(final Team team, final File file) {
         return Arrays.stream(Rank.values())
                 .map(rank -> findByCoordinate(Coordinate.of(file, rank)))
                 .filter(piece -> piece.isSameTeam(team))
