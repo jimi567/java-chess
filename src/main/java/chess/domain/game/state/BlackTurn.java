@@ -9,15 +9,24 @@ import java.util.NoSuchElementException;
 
 public class BlackTurn extends Running {
 
+    private static final State INSTANCE = new BlackTurn();
+
+    private BlackTurn() {
+    }
+
+    public static State getInstance() {
+        return INSTANCE;
+    }
+
     @Override
     public State move(final Board board, final Coordinate source, final Coordinate target) {
         validateCoordinate(source, target);
         validateSourcePiece(board.findByCoordinate(source));
         Piece captured = board.move(source, target);
         if (captured.isSameType(PieceType.KING)) {
-            return new GameOver();
+            return GameOver.getInstance();
         }
-        return new WhiteTurn();
+        return WhiteTurn.getInstance();
     }
 
     private void validateCoordinate(final Coordinate source, final Coordinate target) {

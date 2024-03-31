@@ -4,6 +4,16 @@ import chess.domain.board.Board;
 import chess.domain.board.Coordinate;
 
 public class Ready implements State {
+
+    private static final State INSTANCE = new Ready();
+
+    private Ready() {
+    }
+
+    public static State getInstance() {
+        return INSTANCE;
+    }
+
     @Override
     public boolean isRunning() {
         return true;
@@ -16,12 +26,12 @@ public class Ready implements State {
 
     @Override
     public State start() {
-        return new WhiteTurn();
+        return WhiteTurn.getInstance();
     }
 
     @Override
     public State end() {
-        return new End();
+        return End.getInstance();
     }
 
     @Override

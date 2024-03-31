@@ -8,6 +8,14 @@ import chess.domain.piece.Team;
 import java.util.NoSuchElementException;
 
 public class WhiteTurn extends Running {
+    private static final State INSTANCE = new WhiteTurn();
+
+    private WhiteTurn() {
+    }
+    
+    public static State getInstance() {
+        return INSTANCE;
+    }
 
     @Override
     public State move(final Board board, final Coordinate source, final Coordinate target) {
@@ -15,9 +23,9 @@ public class WhiteTurn extends Running {
         validateSourcePiece(board.findByCoordinate(source));
         Piece captured = board.move(source, target);
         if (captured.isSameType(PieceType.KING)) {
-            return new GameOver();
+            return GameOver.getInstance();
         }
-        return new BlackTurn();
+        return BlackTurn.getInstance();
     }
 
     private void validateCoordinate(final Coordinate source, final Coordinate target) {

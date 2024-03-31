@@ -4,6 +4,16 @@ import chess.domain.board.Board;
 import chess.domain.board.Coordinate;
 
 public class GameOver implements State {
+
+    private static final State INSTANCE = new GameOver();
+
+    private GameOver() {
+    }
+
+    public static State getInstance() {
+        return INSTANCE;
+    }
+
     @Override
     public boolean isRunning() {
         return false;

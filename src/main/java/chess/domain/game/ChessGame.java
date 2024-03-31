@@ -18,7 +18,7 @@ public class ChessGame {
 
     public ChessGame() {
         this.board = new Board();
-        state = new Ready();
+        state = Ready.getInstance();
     }
 
     public void start(final List<MovementResponse> history) {

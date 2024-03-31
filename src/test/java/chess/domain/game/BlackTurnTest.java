@@ -11,13 +11,12 @@ import static chess.domain.fixture.CoordinateFixture.D8;
 import static chess.domain.piece.directionmove.Queen.BLACK_QUEEN;
 import static chess.domain.piece.fixedmove.King.WHITE_KING;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import chess.domain.board.Board;
 import chess.domain.board.Coordinate;
 import chess.domain.game.state.BlackTurn;
-import chess.domain.game.state.End;
+import chess.domain.game.state.GameOver;
 import chess.domain.game.state.State;
 import chess.domain.game.state.WhiteTurn;
 import chess.domain.piece.Piece;
@@ -29,18 +28,11 @@ import org.junit.jupiter.api.Test;
 
 class BlackTurnTest {
 
-    @DisplayName("생성 테스트")
-    @Test
-    void create() {
-        assertThatCode(BlackTurn::new)
-                .doesNotThrowAnyException();
-    }
-
     @DisplayName("기물을 움직이고 나면 흰 팀의 차례가 된다.")
     @Test
     void move() {
         Board board = new Board();
-        State blackTurn = new BlackTurn();
+        State blackTurn = BlackTurn.getInstance();
 
         assertThat(blackTurn.move(board, D7, D5)).isInstanceOf(WhiteTurn.class);
     }
@@ -53,16 +45,16 @@ class BlackTurnTest {
         pieces.put(D1, WHITE_KING);
 
         Board board = new Board(pieces);
-        State blackTurn = new BlackTurn();
+        State blackTurn = BlackTurn.getInstance();
 
-        assertThat(blackTurn.move(board, D8, D1)).isInstanceOf(End.class);
+        assertThat(blackTurn.move(board, D8, D1)).isInstanceOf(GameOver.class);
     }
 
     @DisplayName("source 좌표에 기물이 없으면 예외가 발생한다.")
     @Test
     void moveNothing() {
         Board board = new Board();
-        State blackTurn = new BlackTurn();
+        State blackTurn = BlackTurn.getInstance();
 
         assertThatThrownBy(() -> blackTurn.move(board, A5, A8))
                 .isInstanceOf(NoSuchElementException.class);
@@ -72,7 +64,7 @@ class BlackTurnTest {
     @Test
     void moveWhite() {
         Board board = new Board();
-        State blackTurn = new BlackTurn();
+        State blackTurn = BlackTurn.getInstance();
 
         assertThatThrownBy(() -> blackTurn.move(board, A2, A4))
                 .isInstanceOf(IllegalStateException.class)
