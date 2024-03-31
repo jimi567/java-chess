@@ -10,6 +10,11 @@ public class Ready implements State {
     }
 
     @Override
+    public boolean isGameOver() {
+        return false;
+    }
+
+    @Override
     public State start() {
         return new WhiteTurn();
     }

@@ -33,6 +33,7 @@ public class ChessGame {
         state = state.move(board, source, target);
     }
 
+
     public ChessStatus status() {
         state = state.status();
         Map<Team, BigDecimal> scores = new HashMap<>();
@@ -47,6 +48,10 @@ public class ChessGame {
 
     public boolean isRunning() {
         return state.isRunning();
+    }
+
+    public boolean isGameOver() {
+        return state.isGameOver();
     }
 
     public Board board() {

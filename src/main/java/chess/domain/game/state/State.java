@@ -6,6 +6,8 @@ import chess.domain.board.Coordinate;
 public interface State {
     boolean isRunning();
 
+    boolean isGameOver();
+
     State start();
 
     State end();

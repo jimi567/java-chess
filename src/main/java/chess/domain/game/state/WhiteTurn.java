@@ -15,7 +15,7 @@ public class WhiteTurn extends Running {
         validateSourcePiece(board.findByCoordinate(source));
         Piece captured = board.move(source, target);
         if (captured.isSameType(PieceType.KING)) {
-            return new End();
+            return new GameOver();
         }
         return new BlackTurn();
     }
