@@ -1,6 +1,7 @@
 package chess;
 
 import chess.db.dto.MovementResponse;
+import chess.domain.board.Coordinate;
 import chess.domain.game.ChessGame;
 import chess.domain.game.ChessStatus;
 import chess.service.ChessGameService;
@@ -59,9 +60,10 @@ class Controller {
         InputTokens inputTokens = inputView.readCommand();
         Command command = Command.from(inputTokens);
         if (command.isMove()) {
-            chessGame.move(command.sourceCoordinate(inputTokens),
-                    command.targetCoordinate(inputTokens));
-            chessGameService.addMovement(command.sourceCoordinate(inputTokens), command.targetCoordinate(inputTokens));
+            Coordinate sourceCoordinate = command.sourceCoordinate(inputTokens);
+            Coordinate targetCoordinate = command.targetCoordinate(inputTokens);
+            chessGame.move(sourceCoordinate, targetCoordinate);
+            chessGameService.addMovement(sourceCoordinate, targetCoordinate);
             outputView.printBoard(chessGame.board());
             return;
         }
