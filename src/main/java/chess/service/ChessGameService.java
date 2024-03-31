@@ -1,4 +1,4 @@
-package service;
+package chess.service;
 
 import chess.db.dao.MovementDao;
 import chess.db.dto.MovementRequest;

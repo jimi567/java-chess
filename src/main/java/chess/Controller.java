@@ -3,12 +3,12 @@ package chess;
 import chess.db.dto.MovementResponse;
 import chess.domain.game.ChessGame;
 import chess.domain.game.ChessStatus;
+import chess.service.ChessGameService;
 import chess.view.Command;
 import chess.view.InputTokens;
 import chess.view.InputView;
 import chess.view.OutputView;
 import java.util.List;
-import service.ChessGameService;
 
 class Controller {
 
