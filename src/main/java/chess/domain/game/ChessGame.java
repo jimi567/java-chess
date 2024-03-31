@@ -1,5 +1,6 @@
 package chess.domain.game;
 
+import chess.db.dto.MovementResponse;
 import chess.domain.board.Board;
 import chess.domain.board.Coordinate;
 import chess.domain.game.state.Ready;
@@ -7,6 +8,7 @@ import chess.domain.game.state.State;
 import chess.domain.piece.Team;
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ChessGame {
@@ -19,8 +21,12 @@ public class ChessGame {
         state = new Ready();
     }
 
-    public void start() {
+    public void start(final List<MovementResponse> history) {
         state = state.start();
+
+        for (MovementResponse movementResponse : history) {
+            state = state.move(board, movementResponse.source(), movementResponse.target());
+        }
     }
 
     public void move(final Coordinate source, final Coordinate target) {
