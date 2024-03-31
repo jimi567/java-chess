@@ -1,11 +1,14 @@
 package chess;
 
+import chess.db.dto.MovementResponse;
 import chess.domain.game.ChessGame;
 import chess.domain.game.ChessStatus;
 import chess.view.Command;
 import chess.view.InputTokens;
 import chess.view.InputView;
 import chess.view.OutputView;
+import java.util.List;
+import service.ChessGameService;
 
 class Controller {
 
@@ -13,6 +16,7 @@ class Controller {
     private final OutputView outputView;
 
     private final ChessGame chessGame = new ChessGame();
+    private final ChessGameService chessGameService = new ChessGameService();
 
     public Controller(InputView inputView, OutputView outputView) {
         this.inputView = inputView;
@@ -27,7 +31,8 @@ class Controller {
     private void start() {
         Command command = repeatUntilLegalCommand();
         if (command.isStart()) {
-            chessGame.start();
+            List<MovementResponse> movementHistory = chessGameService.loadAllMovement();
+            chessGame.start(movementHistory);
             repeatUntilLegalState(this::proceed);
             return;
         }
@@ -44,13 +49,19 @@ class Controller {
         while (chessGame.isRunning()) {
             execute();
         }
+
+        if (chessGame.isGameOver()) {
+            chessGameService.clearDB();
+        }
     }
 
     private void execute() {
         InputTokens inputTokens = inputView.readCommand();
         Command command = Command.from(inputTokens);
         if (command.isMove()) {
-            chessGame.move(command.sourceCoordinate(inputTokens), command.targetCoordinate(inputTokens));
+            chessGame.move(command.sourceCoordinate(inputTokens),
+                    command.targetCoordinate(inputTokens));
+            chessGameService.addMovement(command.sourceCoordinate(inputTokens), command.targetCoordinate(inputTokens));
             outputView.printBoard(chessGame.board());
             return;
         }
