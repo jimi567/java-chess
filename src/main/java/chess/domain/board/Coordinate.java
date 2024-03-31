@@ -65,6 +65,10 @@ public class Coordinate {
         return file;
     }
 
+    public Rank rank() {
+        return rank;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
