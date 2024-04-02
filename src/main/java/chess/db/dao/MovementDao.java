@@ -1,8 +1,8 @@
 package chess.db.dao;
 
 import chess.db.DBConnection;
-import chess.db.dto.MovementRequest;
-import chess.db.dto.MovementResponse;
+import chess.dto.MovementRequest;
+import chess.dto.MovementResponse;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;

@@ -1,9 +1,11 @@
 package chess;
 
-import chess.db.dto.MovementResponse;
-import chess.domain.board.Coordinate;
+import static chess.dto.MovementMapper.mapToMovement;
+
 import chess.domain.game.ChessGame;
 import chess.domain.game.ChessStatus;
+import chess.domain.game.Movement;
+import chess.dto.MovementRequest;
 import chess.service.ChessGameService;
 import chess.view.Command;
 import chess.view.InputTokens;
@@ -32,8 +34,8 @@ class Controller {
     private void start() {
         Command command = repeatUntilLegalCommand();
         if (command.isStart()) {
-            List<MovementResponse> movementHistory = chessGameService.loadAllMovement();
-            chessGame.start(movementHistory);
+            List<Movement> movements = chessGameService.loadAllMovement();
+            chessGame.start(movements);
             repeatUntilLegalState(this::proceed);
             return;
         }
@@ -60,10 +62,10 @@ class Controller {
         InputTokens inputTokens = inputView.readCommand();
         Command command = Command.from(inputTokens);
         if (command.isMove()) {
-            Coordinate sourceCoordinate = command.sourceCoordinate(inputTokens);
-            Coordinate targetCoordinate = command.targetCoordinate(inputTokens);
-            chessGame.move(sourceCoordinate, targetCoordinate);
-            chessGameService.addMovement(sourceCoordinate, targetCoordinate);
+            MovementRequest movementRequest = command.movementRequest(inputTokens);
+            Movement movement = mapToMovement(movementRequest.sourceCoordinate(), movementRequest.targetCoordinate());
+            chessGame.move(movement);
+            chessGameService.addMovement(movement);
             outputView.printBoard(chessGame.board());
             return;
         }
