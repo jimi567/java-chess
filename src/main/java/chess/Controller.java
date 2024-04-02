@@ -1,11 +1,8 @@
 package chess;
 
-import static chess.dto.MovementMapper.mapToMovement;
-
 import chess.domain.game.ChessGame;
 import chess.domain.game.ChessStatus;
 import chess.domain.game.Movement;
-import chess.dto.MovementRequest;
 import chess.service.ChessGameService;
 import chess.view.Command;
 import chess.view.InputTokens;
@@ -62,8 +59,7 @@ class Controller {
         InputTokens inputTokens = inputView.readCommand();
         Command command = Command.from(inputTokens);
         if (command.isMove()) {
-            MovementRequest movementRequest = command.movementRequest(inputTokens);
-            Movement movement = mapToMovement(movementRequest.sourceCoordinate(), movementRequest.targetCoordinate());
+            Movement movement = command.movement(inputTokens);
             chessGame.move(movement);
             chessGameService.addMovement(movement);
             outputView.printBoard(chessGame.board());
