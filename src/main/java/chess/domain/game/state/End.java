@@ -4,7 +4,7 @@ import chess.domain.board.Board;
 import chess.domain.board.Coordinate;
 
 public class End implements State {
-    
+
     private static final State INSTANCE = new End();
 
     private End() {
