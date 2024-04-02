@@ -9,8 +9,8 @@ import static chess.domain.fixture.CoordinateFixture.D7;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import chess.domain.game.Movement;
-import chess.dto.MovementRequest;
-import chess.dto.MovementResponse;
+import chess.dto.db.MovementRequest;
+import chess.dto.db.MovementResponse;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

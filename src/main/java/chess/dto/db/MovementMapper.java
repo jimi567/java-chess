@@ -1,4 +1,4 @@
-package chess.dto;
+package chess.dto.db;
 
 import chess.domain.board.Coordinate;
 import chess.domain.board.File;

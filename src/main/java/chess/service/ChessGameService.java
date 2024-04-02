@@ -2,8 +2,8 @@ package chess.service;
 
 import chess.db.dao.MovementDao;
 import chess.domain.game.Movement;
-import chess.dto.MovementRequest;
-import chess.dto.MovementResponse;
+import chess.dto.db.MovementRequest;
+import chess.dto.db.MovementResponse;
 import java.util.List;
 
 public class ChessGameService {
