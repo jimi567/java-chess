@@ -6,6 +6,6 @@ public record MovementRequest(String sourceCoordinate, String targetCoordinate) 
 
     public static MovementRequest of(final Movement movement) {
         return new MovementRequest(MovementMapper.mapToString(movement.source()),
-                MovementMapper.mapToString(movement.source()));
+                MovementMapper.mapToString(movement.target()));
     }
 }
