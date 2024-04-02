@@ -1,8 +1,6 @@
 package chess.domain.game;
 
-import chess.db.dto.MovementResponse;
 import chess.domain.board.Board;
-import chess.domain.board.Coordinate;
 import chess.domain.game.state.Ready;
 import chess.domain.game.state.State;
 import chess.domain.piece.Team;
@@ -15,22 +13,20 @@ public class ChessGame {
     private final Board board;
     private State state;
 
-
     public ChessGame() {
         this.board = new Board();
         state = Ready.getInstance();
     }
 
-    public void start(final List<MovementResponse> history) {
+    public void start(final List<Movement> movements) {
         state = state.start();
-
-        for (MovementResponse movementResponse : history) {
-            state = state.move(board, movementResponse.source(), movementResponse.target());
+        for (Movement movement : movements) {
+            this.move(movement);
         }
     }
 
-    public void move(final Coordinate source, final Coordinate target) {
-        state = state.move(board, source, target);
+    public void move(final Movement movement) {
+        state = state.move(board, movement.source(), movement.target());
     }
 
 

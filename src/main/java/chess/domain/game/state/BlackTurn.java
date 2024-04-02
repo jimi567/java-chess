@@ -20,19 +20,12 @@ public class BlackTurn extends Running {
 
     @Override
     public State move(final Board board, final Coordinate source, final Coordinate target) {
-        validateCoordinate(source, target);
         validateSourcePiece(board.findByCoordinate(source));
         Piece captured = board.move(source, target);
         if (captured.isSameType(PieceType.KING)) {
             return GameOver.getInstance();
         }
         return WhiteTurn.getInstance();
-    }
-
-    private void validateCoordinate(final Coordinate source, final Coordinate target) {
-        if (source.equals(target)) {
-            throw new IllegalArgumentException("동일한 위치로 이동할 수 없습니다.");
-        }
     }
 
     private void validateSourcePiece(final Piece sourcePiece) {

@@ -1,14 +1,11 @@
 package chess.db.dto;
 
-import chess.domain.board.Coordinate;
+import chess.domain.game.Movement;
 
 public record MovementRequest(String sourceCoordinate, String targetCoordinate) {
 
-    public static MovementRequest of(Coordinate source, Coordinate target) {
-        return new MovementRequest(coordinateToString(source), coordinateToString(target));
-    }
-
-    private static String coordinateToString(final Coordinate coordinate) {
-        return FileConverter.convert(coordinate.file()) + RankConverter.convert(coordinate.rank());
+    public static MovementRequest of(final Movement movement) {
+        return new MovementRequest(MovementMapper.mapToString(movement.source()),
+                MovementMapper.mapToString(movement.source()));
     }
 }
