@@ -11,12 +11,13 @@ import java.util.List;
 public class MovementDAO {
 
     public void addMovement(MovementRequest movementRequest) {
-        String query = "INSERT INTO movement (source_coordinate, target_coordinate) VALUES (?, ?)";
+        String query = "INSERT INTO movement (chess_game_id, source_coordinate, target_coordinate) VALUES (?, ?, ?)";
 
         try (var connection = DBConnection.getConnection();
              var preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setString(1, movementRequest.sourceCoordinate());
-            preparedStatement.setString(2, movementRequest.targetCoordinate());
+            preparedStatement.setLong(1, movementRequest.chess_game_id());
+            preparedStatement.setString(2, movementRequest.sourceCoordinate());
+            preparedStatement.setString(3, movementRequest.targetCoordinate());
             preparedStatement.executeUpdate();
         } catch (final SQLException e) {
             throw new RuntimeException(e);
@@ -31,15 +32,16 @@ public class MovementDAO {
         ) {
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            List<MovementResponse> pieceResponses = new ArrayList<>();
+            List<MovementResponse> movementResponses = new ArrayList<>();
             while (resultSet.next()) {
-                pieceResponses.add(MovementResponse.of(
+                movementResponses.add(MovementResponse.of(
+                        resultSet.getLong("chess_game_id"),
                         resultSet.getString("source_coordinate"),
                         resultSet.getString("target_coordinate")
                 ));
-                
+
             }
-            return pieceResponses;
+            return movementResponses;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
