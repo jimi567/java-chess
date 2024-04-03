@@ -8,9 +8,10 @@ import chess.domain.board.Coordinate;
 import chess.domain.piece.PieceType;
 import chess.domain.piece.Team;
 
-public record PieceResponse(long id, Coordinate coordinate, Team team, PieceType type) {
+public record PieceResponse(String chess_game_name, Coordinate coordinate, Team team, PieceType type) {
 
-    public static PieceResponse of(long id, String coordinate, String team, String type) {
-        return new PieceResponse(id, mapToCoordinate(coordinate), mapToTeam(team), mapToPieceType(type));
+    public static PieceResponse of(final String chess_game_name, final String coordinate, final String team,
+                                   final String type) {
+        return new PieceResponse(chess_game_name, mapToCoordinate(coordinate), mapToTeam(team), mapToPieceType(type));
     }
 }

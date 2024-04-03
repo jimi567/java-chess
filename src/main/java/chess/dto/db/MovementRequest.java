@@ -2,10 +2,10 @@ package chess.dto.db;
 
 import chess.domain.game.Movement;
 
-public record MovementRequest(long chess_game_id, String sourceCoordinate, String targetCoordinate) {
+public record MovementRequest(String chess_game_name, String sourceCoordinate, String targetCoordinate) {
 
-    public static MovementRequest of(final long chess_game_id, final Movement movement) {
-        return new MovementRequest(chess_game_id, MovementMapper.mapToString(movement.source()),
+    public static MovementRequest of(final String chess_game_name, final Movement movement) {
+        return new MovementRequest(chess_game_name, MovementMapper.mapToString(movement.source()),
                 MovementMapper.mapToString(movement.target()));
     }
 }

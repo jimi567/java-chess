@@ -34,7 +34,6 @@ public class ChessGameDAO {
             List<ChessGameResponse> chessGameResponses = new ArrayList<>();
             while (resultSet.next()) {
                 chessGameResponses.add(ChessGameResponse.of(
-                        resultSet.getLong("id"),
                         resultSet.getString("name"),
                         resultSet.getString("state")
                 ));
@@ -46,12 +45,12 @@ public class ChessGameDAO {
     }
 
     public void deleteOne(final ChessGameRequest chessGameRequest) {
-        String query = "DELETE FROM chess_game WHERE id = ?";
+        String query = "DELETE FROM chess_game WHERE name = ?";
 
         try (var connection = DBConnection.getConnection();
              var preparedStatement = connection.prepareStatement(query)
         ) {
-            preparedStatement.setLong(1, chessGameRequest.id());
+            preparedStatement.setString(1, chessGameRequest.name());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);

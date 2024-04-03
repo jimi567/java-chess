@@ -10,12 +10,12 @@ import java.util.List;
 
 public class PieceDAO {
     public void addAll(List<PieceRequest> pieceRequests) {
-        String query = "INSERT INTO piece (chess_game_id, coordinate, team, type) VALUES (?,?,?,?)";
+        String query = "INSERT INTO piece (chess_game_name, coordinate, team, type) VALUES (?,?,?,?)";
 
         try (var connection = DBConnection.getConnection();
              var preparedStatement = connection.prepareStatement(query)) {
             for (PieceRequest pieceRequest : pieceRequests) {
-                preparedStatement.setLong(1, pieceRequest.chess_game_id());
+                preparedStatement.setString(1, pieceRequest.chess_game_name());
                 preparedStatement.setString(2, pieceRequest.coordinate());
                 preparedStatement.setString(3, pieceRequest.team());
                 preparedStatement.setString(4, pieceRequest.type());
@@ -27,17 +27,18 @@ public class PieceDAO {
         }
     }
 
-    public List<PieceResponse> findAll() {
-        String query = "SELECT * FROM piece";
+    public List<PieceResponse> findAllByGameName(final String gameName) {
+        String query = "SELECT * FROM piece WHERE chess_game_name = ?";
 
         try (var connection = DBConnection.getConnection();
              var preparedStatement = connection.prepareStatement(query)
         ) {
+            preparedStatement.setString(1, gameName);
             ResultSet resultSet = preparedStatement.executeQuery();
             List<PieceResponse> pieceResponses = new ArrayList<>();
             while (resultSet.next()) {
                 pieceResponses.add(PieceResponse.of(
-                        resultSet.getLong("chess_game_id"),
+                        resultSet.getString("chess_game_chess"),
                         resultSet.getString("coordinate"),
                         resultSet.getString("team"),
                         resultSet.getString("type")
@@ -50,12 +51,13 @@ public class PieceDAO {
         }
     }
 
-    public void clear() {
-        String query = "DELETE FROM piece";
+    public void deleteByGameName(final String gameName) {
+        String query = "DELETE FROM piece WHERE chess_game_name = ?";
 
         try (var connection = DBConnection.getConnection();
              var preparedStatement = connection.prepareStatement(query)
         ) {
+            preparedStatement.setString(1, gameName);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
