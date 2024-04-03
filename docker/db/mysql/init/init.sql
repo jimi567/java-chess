@@ -16,17 +16,6 @@ CREATE TABLE movement
     target_coordinate VARCHAR(2)  NOT NULL,
 
     PRIMARY KEY (movement_id),
-    FOREIGN KEY (chess_game_name) REFERENCES chess_game (name)
+    FOREIGN KEY (chess_game_name) REFERENCES chess_game (name) ON DELETE CASCADE
 );
 
-CREATE TABLE piece
-(
-    piece_id        BIGINT      NOT NULL AUTO_INCREMENT,
-    chess_game_name VARCHAR(32) NOT NULL,
-    coordinate      VARCHAR(2)  NOT NULL,
-    team            VARCHAR(8)  NOT NULL,
-    type            VARCHAR(8)  NOT NULL,
-
-    PRIMARY KEY (piece_id),
-    FOREIGN KEY (chess_game_name) REFERENCES chess_game (name)
-);

@@ -26,6 +26,7 @@ class Controller {
         try {
             String gameName = inputView.readGameRoomName(chessGameService.gameNames());
             chessGameService.selectGame(gameName);
+            chessGameService.rollback();
             repeatUntilLegalState(this::proceed);
         } catch (NoSuchElementException e) {
             outputView.printStartMessage();

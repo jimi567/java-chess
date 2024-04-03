@@ -22,7 +22,7 @@ import java.util.Set;
 public final class Knight extends FixedMovePiece {
     public static final Piece WHITE_KNIGHT = new Knight(WHITE);
     public static final Piece BLACK_KNIGHT = new Knight(BLACK);
-    public static final BigDecimal SCORE = new BigDecimal("2.5");
+    private static final BigDecimal SCORE = new BigDecimal("2.5");
 
     private Knight(Team team) {
         super(PieceType.KNIGHT, team);

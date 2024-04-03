@@ -12,8 +12,8 @@ public class ChessStateMapper {
 
     static {
         STRING_STATE = new HashMap<>();
-        STRING_STATE.put("black_turn", BlackTurn.getInstance());
-        STRING_STATE.put("white_turn", WhiteTurn.getInstance());
+        STRING_STATE.put("black", BlackTurn.getInstance());
+        STRING_STATE.put("white", WhiteTurn.getInstance());
     }
 
     public static State mapToState(final String state) {
@@ -22,8 +22,8 @@ public class ChessStateMapper {
 
     public static String mapToString(final State state) {
         if (state == BlackTurn.getInstance()) {
-            return "black_turn";
+            return "black";
         }
-        return "white_turn";
+        return "white";
     }
 }

@@ -23,7 +23,7 @@ public class King extends FixedMovePiece {
 
     public static final Piece WHITE_KING = new King(WHITE);
     public static final Piece BLACK_KING = new King(BLACK);
-    public static final BigDecimal SCORE = BigDecimal.ZERO;
+    private static final BigDecimal SCORE = BigDecimal.ZERO;
 
     private King(Team team) {
         super(PieceType.KING, team);

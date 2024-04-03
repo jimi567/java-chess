@@ -2,28 +2,22 @@ package chess.service;
 
 import chess.db.dao.ChessGameDAO;
 import chess.db.dao.MovementDAO;
-import chess.db.dao.PieceDAO;
 import chess.domain.board.Board;
-import chess.domain.board.Coordinate;
 import chess.domain.game.ChessGame;
 import chess.domain.game.ChessStatus;
 import chess.domain.game.Movement;
 import chess.domain.game.state.GameOver;
 import chess.domain.game.state.Ready;
-import chess.domain.piece.Piece;
 import chess.dto.db.ChessGameRequest;
 import chess.dto.db.ChessGameResponse;
 import chess.dto.db.MovementRequest;
 import chess.dto.db.MovementResponse;
-import chess.dto.db.PieceRequest;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class ChessGameService {
     private final MovementDAO movementDao = new MovementDAO();
-    private final PieceDAO pieceDAO = new PieceDAO();
     private final ChessGameDAO chessGameDAO = new ChessGameDAO();
     private final Map<String, ChessGame> gameRooms;
 
@@ -37,7 +31,7 @@ public class ChessGameService {
         gameRooms = new HashMap<>();
         List<ChessGameResponse> chessGameResponses = chessGameDAO.findAll();
         for (ChessGameResponse chessGameResponse : chessGameResponses) {
-            gameRooms.put(chessGameResponse.name(), new ChessGame(chessGameResponse.state()));
+            gameRooms.put(chessGameResponse.name(), new ChessGame());
         }
     }
 
@@ -48,7 +42,7 @@ public class ChessGameService {
 
     public void newGame(final String gameName) {
         chessGameDAO.addGame(ChessGameRequest.of(gameName, Ready.getInstance()));
-        playingGame = new ChessGame(Ready.getInstance());
+        playingGame = new ChessGame();
         this.gameName = gameName;
         gameRooms.put(gameName, playingGame);
     }
@@ -56,14 +50,13 @@ public class ChessGameService {
     public void selectGame(final String gameName) {
         this.gameName = gameName;
         playingGame = gameRooms.get(gameName);
-        rollback();
-    }
-
-    private void rollback() {
-        //TODO : Rollback
     }
 
     public void start() {
+        playingGame.start(List.of());
+    }
+
+    public void rollback() {
         List<Movement> movements = movementDao.findAllByGameName(gameName).stream()
                 .map(MovementResponse::movement)
                 .toList();
@@ -80,15 +73,6 @@ public class ChessGameService {
     }
 
     public void end() {
-        Board board = playingGame.board();
-        Map<Coordinate, Piece> pieces = board.pieces();
-        List<PieceRequest> requests = new ArrayList<>();
-        pieces.forEach((coordinate, piece) -> {
-            requests.add(PieceRequest.of(gameName, coordinate, piece));
-        });
-        pieceDAO.addAll(requests);
-        chessGameDAO.updateGame(ChessGameRequest.of(gameName, playingGame.state()));
-
         playingGame.end();
     }
 
