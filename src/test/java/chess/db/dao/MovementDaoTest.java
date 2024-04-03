@@ -17,9 +17,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-class MovementDaoTest {
+class MovementDAOTest {
 
-    private final MovementDao movementDao = new MovementDao();
+    private final MovementDAO movementDao = new MovementDAO();
 
     @BeforeEach
     void setUp() {

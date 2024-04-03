@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MovementDao {
+public class MovementDAO {
 
     public void addMovement(MovementRequest movementRequest) {
         String query = "INSERT INTO movement (source_coordinate, target_coordinate) VALUES (?, ?)";
@@ -37,6 +37,7 @@ public class MovementDao {
                         resultSet.getString("source_coordinate"),
                         resultSet.getString("target_coordinate")
                 ));
+                
             }
             return pieceResponses;
         } catch (SQLException e) {

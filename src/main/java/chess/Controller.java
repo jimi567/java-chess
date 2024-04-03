@@ -1,21 +1,15 @@
 package chess;
 
-import chess.domain.game.ChessGame;
-import chess.domain.game.ChessStatus;
-import chess.domain.game.Movement;
 import chess.service.ChessGameService;
 import chess.view.Command;
 import chess.view.InputTokens;
 import chess.view.InputView;
 import chess.view.OutputView;
-import java.util.List;
 
 class Controller {
 
     private final InputView inputView;
     private final OutputView outputView;
-
-    private final ChessGame chessGame = new ChessGame();
     private final ChessGameService chessGameService = new ChessGameService();
 
     public Controller(InputView inputView, OutputView outputView) {
@@ -31,8 +25,7 @@ class Controller {
     private void start() {
         Command command = repeatUntilLegalCommand();
         if (command.isStart()) {
-            List<Movement> movements = chessGameService.loadAllMovement();
-            chessGame.start(movements);
+            chessGameService.start();
             repeatUntilLegalState(this::proceed);
             return;
         }
@@ -45,13 +38,13 @@ class Controller {
     }
 
     private void proceed() {
-        outputView.printBoard(chessGame.board());
-        while (chessGame.isRunning()) {
+        outputView.printBoard(chessGameService.chessBoard());
+        while (chessGameService.isRunning()) {
             execute();
         }
 
-        if (chessGame.isGameOver()) {
-            chessGameService.clearDB();
+        if (chessGameService.isGameOver()) {
+            chessGameService.gameOver();
         }
     }
 
@@ -59,21 +52,18 @@ class Controller {
         InputTokens inputTokens = inputView.readCommand();
         Command command = Command.from(inputTokens);
         if (command.isMove()) {
-            Movement movement = command.movement(inputTokens);
-            chessGame.move(movement);
-            chessGameService.addMovement(movement);
-            outputView.printBoard(chessGame.board());
+            chessGameService.move(command.movement(inputTokens));
+            outputView.printBoard(chessGameService.chessBoard());
             return;
         }
 
         if (command.isStatus()) {
-            ChessStatus status = chessGame.status();
-            outputView.printStatus(status);
+            outputView.printStatus(chessGameService.status());
             return;
         }
 
         if (command.isEnd()) {
-            chessGame.end();
+            chessGameService.end();
             return;
         }
         throw new IllegalArgumentException("잘못된 입력입니다.");
