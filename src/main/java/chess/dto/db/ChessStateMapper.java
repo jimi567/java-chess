@@ -1,6 +1,7 @@
 package chess.dto.db;
 
 import chess.domain.game.state.BlackTurn;
+import chess.domain.game.state.Ready;
 import chess.domain.game.state.State;
 import chess.domain.game.state.WhiteTurn;
 import java.util.HashMap;
@@ -12,8 +13,9 @@ public class ChessStateMapper {
 
     static {
         STRING_STATE = new HashMap<>();
-        STRING_STATE.put("black_turn", BlackTurn.getInstance());
-        STRING_STATE.put("white_turn", WhiteTurn.getInstance());
+        STRING_STATE.put("black", BlackTurn.getInstance());
+        STRING_STATE.put("white", WhiteTurn.getInstance());
+        STRING_STATE.put("ready", Ready.getInstance());
     }
 
     public static State mapToState(final String state) {
@@ -22,8 +24,11 @@ public class ChessStateMapper {
 
     public static String mapToString(final State state) {
         if (state == BlackTurn.getInstance()) {
-            return "black_turn";
+            return "black";
         }
-        return "white_turn";
+        if (state == WhiteTurn.getInstance()) {
+            return "white";
+        }
+        return "ready";
     }
 }

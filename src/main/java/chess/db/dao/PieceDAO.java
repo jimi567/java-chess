@@ -50,17 +50,4 @@ public class PieceDAO {
             throw new RuntimeException(e);
         }
     }
-
-    public void deleteByGameName(final String gameName) {
-        String query = "DELETE FROM piece WHERE chess_game_name = ?";
-
-        try (var connection = DBConnection.getConnection();
-             var preparedStatement = connection.prepareStatement(query)
-        ) {
-            preparedStatement.setString(1, gameName);
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
 }

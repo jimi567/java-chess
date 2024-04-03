@@ -23,6 +23,19 @@ public class ChessGameDAO {
         }
     }
 
+    public void updateGame(ChessGameRequest chessGameRequest) {
+        String query = "UPDATE chess_game SET state = ? WHERE name = ?";
+
+        try (var connection = DBConnection.getConnection();
+             var preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, chessGameRequest.state());
+            preparedStatement.setString(2, chessGameRequest.name());
+            preparedStatement.executeUpdate();
+        } catch (final SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public List<ChessGameResponse> findAll() {
         String query = "SELECT * FROM chess_game";
 
@@ -51,6 +64,18 @@ public class ChessGameDAO {
              var preparedStatement = connection.prepareStatement(query)
         ) {
             preparedStatement.setString(1, chessGameRequest.name());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void deleteALL() {
+        String query = "DELETE FROM chess_game";
+
+        try (var connection = DBConnection.getConnection();
+             var preparedStatement = connection.prepareStatement(query)
+        ) {
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);

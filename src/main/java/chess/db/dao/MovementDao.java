@@ -48,16 +48,4 @@ public class MovementDAO {
         }
     }
 
-    public void deleteByGameName(final String gameName) {
-        String query = "DELETE FROM movement WHERE chess_game_name = ?";
-
-        try (var connection = DBConnection.getConnection();
-             var preparedStatement = connection.prepareStatement(query)
-        ) {
-            preparedStatement.setString(1, gameName);
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
 }
