@@ -5,6 +5,7 @@ import chess.view.Command;
 import chess.view.InputTokens;
 import chess.view.InputView;
 import chess.view.OutputView;
+import java.util.NoSuchElementException;
 
 class Controller {
 
@@ -18,9 +19,24 @@ class Controller {
     }
 
     public void run() {
-        outputView.printStartMessage();
-        repeatUntilLegalState(this::start);
+        enterGameRoom();
     }
+
+    private void enterGameRoom() {
+        try {
+            String gameName = inputView.readGameRoomName(chessGameService.gameNames());
+            chessGameService.selectGame(gameName);
+            repeatUntilLegalState(this::proceed);
+        } catch (NoSuchElementException e) {
+            outputView.printStartMessage();
+            chessGameService.newGame(e.getMessage());
+            repeatUntilLegalState(this::start);
+        } catch (IllegalArgumentException e) {
+            outputView.printErrorMessage(e.getMessage());
+            enterGameRoom();
+        }
+    }
+
 
     private void start() {
         Command command = repeatUntilLegalCommand();
@@ -31,6 +47,7 @@ class Controller {
         }
 
         if (command.isEnd()) {
+            chessGameService.end();
             return;
         }
 
