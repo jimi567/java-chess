@@ -59,4 +59,7 @@ public class Board {
                 .toList();
     }
 
+    public Map<Coordinate, Piece> pieces() {
+        return pieces;
+    }
 }

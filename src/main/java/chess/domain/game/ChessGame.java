@@ -1,7 +1,6 @@
 package chess.domain.game;
 
 import chess.domain.board.Board;
-import chess.domain.game.state.Ready;
 import chess.domain.game.state.State;
 import chess.domain.piece.Team;
 import java.math.BigDecimal;
@@ -13,15 +12,17 @@ public class ChessGame {
     private final Board board;
     private State state;
 
-    public ChessGame() {
+    public ChessGame(final State state) {
         this.board = new Board();
-        state = Ready.getInstance();
+        this.state = state;
     }
 
     public void start(final List<Movement> movements) {
-        state = state.start();
         for (Movement movement : movements) {
             this.move(movement);
+        }
+        if (movements.size() == 0) {
+            state = state().start();
         }
     }
 
@@ -52,5 +53,9 @@ public class ChessGame {
 
     public Board board() {
         return board;
+    }
+
+    public State state() {
+        return state;
     }
 }
