@@ -56,16 +56,4 @@ public class ChessGameDAO {
             throw new RuntimeException(e);
         }
     }
-
-    public void deleteALL() {
-        String query = "DELETE FROM chess_game";
-
-        try (var connection = DBConnection.getConnection();
-             var preparedStatement = connection.prepareStatement(query)
-        ) {
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
 }

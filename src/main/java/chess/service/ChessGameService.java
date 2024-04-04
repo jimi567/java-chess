@@ -7,7 +7,6 @@ import chess.domain.game.ChessGame;
 import chess.domain.game.ChessStatus;
 import chess.domain.game.Movement;
 import chess.domain.game.state.GameOver;
-import chess.domain.game.state.Ready;
 import chess.dto.db.ChessGameRequest;
 import chess.dto.db.ChessGameResponse;
 import chess.dto.db.MovementRequest;
@@ -27,7 +26,6 @@ public class ChessGameService {
 
 
     public ChessGameService() {
-        //chessGameDAO.deleteALL();
         gameRooms = new HashMap<>();
         List<ChessGameResponse> chessGameResponses = chessGameDAO.findAll();
         for (ChessGameResponse chessGameResponse : chessGameResponses) {
@@ -41,10 +39,10 @@ public class ChessGameService {
     }
 
     public void newGame(final String gameName) {
-        chessGameDAO.addGame(ChessGameRequest.of(gameName, Ready.getInstance()));
         playingGame = new ChessGame();
         this.gameName = gameName;
         gameRooms.put(gameName, playingGame);
+        chessGameDAO.addGame(ChessGameRequest.of(gameName, playingGame.state()));
     }
 
     public void selectGame(final String gameName) {
