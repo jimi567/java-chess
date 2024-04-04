@@ -27,9 +27,9 @@ class Controller {
             String gameName = inputView.readGameRoomName(chessGameService.gameNames());
             chessGameService.selectGame(gameName);
             chessGameService.rollback();
+            outputView.printStartMessage();
             repeatUntilLegalState(this::proceed);
         } catch (NoSuchElementException e) {
-            outputView.printStartMessage();
             chessGameService.newGame(e.getMessage());
             repeatUntilLegalState(this::start);
         } catch (IllegalArgumentException e) {
@@ -40,6 +40,7 @@ class Controller {
 
 
     private void start() {
+        outputView.printStartMessage();
         Command command = repeatUntilLegalCommand();
         if (command.isStart()) {
             chessGameService.start();
