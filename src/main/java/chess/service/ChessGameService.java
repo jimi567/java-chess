@@ -75,6 +75,7 @@ public class ChessGameService {
     }
 
     public void gameOver() {
+        gameRooms.remove(gameName);
         chessGameDAO.deleteOne(ChessGameRequest.of(gameName, GameOver.getInstance()));
     }
 
