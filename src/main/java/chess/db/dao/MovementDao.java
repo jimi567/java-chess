@@ -19,7 +19,7 @@ public class MovementDAO {
             preparedStatement.setString(2, movementRequest.sourceCoordinate());
             preparedStatement.setString(3, movementRequest.targetCoordinate());
             preparedStatement.executeUpdate();
-        } catch (final SQLException e) {
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
@@ -28,8 +28,7 @@ public class MovementDAO {
         String query = "SELECT * FROM movement WHERE chess_game_name = ?";
 
         try (var connection = DBConnection.getConnection();
-             var preparedStatement = connection.prepareStatement(query)
-        ) {
+             var preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, gameName);
             ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -43,19 +42,6 @@ public class MovementDAO {
 
             }
             return movementResponses;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public void deleteByGameName(final String gameName) {
-        String query = "DELETE FROM movement WHERE chess_game_name = ?";
-
-        try (var connection = DBConnection.getConnection();
-             var preparedStatement = connection.prepareStatement(query)
-        ) {
-            preparedStatement.setString(1, gameName);
-            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
