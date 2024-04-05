@@ -5,7 +5,8 @@ import chess.view.Command;
 import chess.view.InputTokens;
 import chess.view.InputView;
 import chess.view.OutputView;
-import java.util.NoSuchElementException;
+import chess.view.RoomNameToken;
+import java.util.List;
 
 class Controller {
 
@@ -24,17 +25,29 @@ class Controller {
 
     private void enterGameRoom() {
         try {
-            String gameName = inputView.readGameRoomName(chessGameService.gameNames());
-            chessGameService.selectGame(gameName);
-            chessGameService.rollback();
-            outputView.printStartMessage();
-            repeatUntilLegalState(this::proceed);
-        } catch (NoSuchElementException e) {
-            chessGameService.newGame(e.getMessage());
-            repeatUntilLegalState(this::start);
+            checkPresentRoomName();
         } catch (IllegalArgumentException e) {
             outputView.printErrorMessage(e.getMessage());
             enterGameRoom();
+        }
+    }
+
+    private void checkPresentRoomName() {
+        List<String> roomNames = chessGameService.gameNames();
+        RoomNameToken roomName = inputView.readGameRoomName(roomNames);
+        while (roomName.isNotExit()) {
+            if (roomName.isIn(roomNames)) {
+                chessGameService.selectGame(roomName.value());
+                chessGameService.rollback();
+                outputView.printStartMessage();
+                repeatUntilLegalState(this::proceed);
+            }
+            if (roomName.isNotIn(roomNames)) {
+                chessGameService.newGame(roomName.value());
+                repeatUntilLegalState(this::start);
+            }
+            roomNames = chessGameService.gameNames();
+            roomName = inputView.readGameRoomName(chessGameService.gameNames());
         }
     }
 

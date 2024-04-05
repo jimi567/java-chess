@@ -41,7 +41,6 @@ public class ChessGameService {
     public void newGame(final String gameName) {
         playingGame = new ChessGame();
         this.gameName = gameName;
-        gameRooms.put(gameName, playingGame);
         chessGameDAO.addGame(ChessGameRequest.of(gameName, playingGame.state()));
     }
 
@@ -71,6 +70,7 @@ public class ChessGameService {
     }
 
     public void end() {
+        gameRooms.put(gameName, new ChessGame());
         playingGame.end();
     }
 
@@ -87,6 +87,7 @@ public class ChessGameService {
     }
 
     public Board chessBoard() {
+
         return playingGame.board();
     }
 
