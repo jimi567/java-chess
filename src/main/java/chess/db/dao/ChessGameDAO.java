@@ -44,6 +44,26 @@ public class ChessGameDAO {
         }
     }
 
+    public ChessGameResponse findByName(final String name) {
+        String query = "SELECT * FROM chess_game WHERE name = ?";
+
+        try (var connection = DBConnection.getConnection();
+             var preparedStatement = connection.prepareStatement(query)
+        ) {
+            preparedStatement.setString(1, name);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return ChessGameResponse.of(
+                        resultSet.getString("name"),
+                        resultSet.getString("state")
+                );
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
+
     public void deleteOne(final ChessGameRequest chessGameRequest) {
         String query = "DELETE FROM chess_game WHERE name = ?";
 

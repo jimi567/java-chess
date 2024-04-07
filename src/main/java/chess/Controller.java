@@ -1,5 +1,7 @@
 package chess;
 
+import chess.domain.game.ChessGame;
+import chess.domain.game.Movement;
 import chess.service.ChessGameService;
 import chess.view.Command;
 import chess.view.InputTokens;
@@ -13,7 +15,7 @@ class Controller {
     private final InputView inputView;
     private final OutputView outputView;
     private final ChessGameService chessGameService = new ChessGameService();
-
+    
     public Controller(InputView inputView, OutputView outputView) {
         this.inputView = inputView;
         this.outputView = outputView;
@@ -36,66 +38,78 @@ class Controller {
         List<String> roomNames = chessGameService.gameNames();
         RoomNameToken roomName = inputView.readGameRoomName(roomNames);
         while (roomName.isNotExit()) {
-            if (roomName.isIn(roomNames)) {
-                chessGameService.selectGame(roomName.value());
-                chessGameService.rollback();
-                outputView.printStartMessage();
-                repeatUntilLegalState(this::proceed);
-            }
-            if (roomName.isNotIn(roomNames)) {
-                chessGameService.newGame(roomName.value());
-                repeatUntilLegalState(this::start);
-            }
+            checkStartOrContinue(roomNames, roomName);
             roomNames = chessGameService.gameNames();
             roomName = inputView.readGameRoomName(chessGameService.gameNames());
         }
     }
 
+    private void checkStartOrContinue(final List<String> roomNames, final RoomNameToken roomName) {
+        String gameName = roomName.value();
+        if (roomName.isIn(roomNames)) {
+            continueGame(gameName);
+        }
+        if (roomName.isNotIn(roomNames)) {
+            startNewGame(roomName, gameName);
+        }
+    }
 
-    private void start() {
+    private void startNewGame(final RoomNameToken roomName, final String gameName) {
+        repeatUntilLegalState(() -> start(gameName, chessGameService.newGame(roomName.value())));
+    }
+
+    private void continueGame(final String gameName) {
+        outputView.printStartMessage();
+        repeatUntilLegalState(() -> proceed(gameName, chessGameService.selectGame(gameName)));
+    }
+
+
+    private void start(final String gameName, final ChessGame chessGame) {
         outputView.printStartMessage();
         Command command = repeatUntilLegalCommand();
         if (command.isStart()) {
-            chessGameService.start();
-            repeatUntilLegalState(this::proceed);
+            chessGame.start();
+            repeatUntilLegalState(() -> proceed(gameName, chessGame));
             return;
         }
 
         if (command.isEnd()) {
-            chessGameService.end();
+            chessGame.end();
             return;
         }
 
         throw new IllegalArgumentException("잘못된 입력입니다.");
     }
 
-    private void proceed() {
-        outputView.printBoard(chessGameService.chessBoard());
-        while (chessGameService.isRunning()) {
-            execute();
+    private void proceed(final String gameName, final ChessGame chessGame) {
+        outputView.printBoard(chessGame.board());
+        while (chessGame.isRunning()) {
+            execute(gameName, chessGame);
         }
 
-        if (chessGameService.isGameOver()) {
-            chessGameService.gameOver();
+        if (chessGame.isGameOver()) {
+            chessGameService.removeHistory(gameName);
         }
     }
 
-    private void execute() {
+    private void execute(final String gameName, final ChessGame chessGame) {
         InputTokens inputTokens = inputView.readCommand();
         Command command = Command.from(inputTokens);
         if (command.isMove()) {
-            chessGameService.move(command.movement(inputTokens));
-            outputView.printBoard(chessGameService.chessBoard());
+            Movement movement = command.movement(inputTokens);
+            chessGame.move(movement);
+            chessGameService.addHistory(gameName, movement);
+            outputView.printBoard(chessGame.board());
             return;
         }
 
         if (command.isStatus()) {
-            outputView.printStatus(chessGameService.status());
+            outputView.printStatus(chessGame.status());
             return;
         }
 
         if (command.isEnd()) {
-            chessGameService.end();
+            chessGame.end();
             return;
         }
         throw new IllegalArgumentException("잘못된 입력입니다.");
