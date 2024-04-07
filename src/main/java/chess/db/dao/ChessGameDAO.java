@@ -3,6 +3,7 @@ package chess.db.dao;
 import chess.db.DBConnection;
 import chess.dto.db.ChessGameRequest;
 import chess.dto.db.ChessGameResponse;
+import chess.exception.DataAccessException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ public class ChessGameDAO {
             preparedStatement.setString(2, chessGameRequest.state());
             preparedStatement.executeUpdate();
         } catch (final SQLException e) {
-            throw new RuntimeException(e);
+            throw new DataAccessException(e);
         }
     }
 
@@ -40,7 +41,7 @@ public class ChessGameDAO {
             }
             return chessGameResponses;
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DataAccessException(e);
         }
     }
 
@@ -59,7 +60,7 @@ public class ChessGameDAO {
                 );
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DataAccessException(e);
         }
         return null;
     }
@@ -73,7 +74,7 @@ public class ChessGameDAO {
             preparedStatement.setString(1, chessGameRequest.name());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DataAccessException(e);
         }
     }
 }
